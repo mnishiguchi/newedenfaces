@@ -3,6 +3,8 @@
 In this repo, I learn React, Node.js, MongoDB and Socket.IO, following the tutorial "[
 Create a character voting app using React, Node.js, MongoDB and Socket.IO](http://sahatyalkabov.com/create-a-character-voting-app-using-react-nodejs-mongodb-and-socketio/#overview)" by Sahat Yalkabov.
 
+[Source code](https://github.com/sahat/newedenfaces-react)
+
 ## Dependencies
 
 - alt 
