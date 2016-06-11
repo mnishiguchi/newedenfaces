@@ -5,41 +5,69 @@ Create a character voting app using React, Node.js, MongoDB and Socket.IO](http:
 
 [Source code](https://github.com/sahat/newedenfaces-react)
 
+
+## Get started
+
+Build the app, concatenate vendor files, compile LESS stylesheets and watch for file changes.
+
+```
+gulp
+```
+
+Start the Node.js server and automatically restart the process on file changes.
+
+```
+npm run watch
+```
+
+Visit [http://localhost:3000](http://localhost:3000)
+
+
 ## Dependencies
 
-- alt 
-    + Flux library for React.
+- alt
+  + Flux library for React.
 - async   
-    + For managing asynchronous flow.
-- body-parser 
-    + For parsing POST request data.
+  + For managing asynchronous flow.
+- body-parser
+  + For parsing POST request data.
 - colors  
-    + Pretty console output messages.
-- compression 
-    + Gzip compression.
-- express 
-    + Web framework for Node.js.
-- history 
-    + Manage session history in browsers, used by react-router.
+  + Pretty console output messages.
+- compression
+  + Gzip compression.
+- express
+  + Web framework for Node.js.
+- history
+  + Manage session history in browsers, used by react-router.
 - mongoose    
-    + MongoDB ODM with validation and schema support.
+  + MongoDB ODM with validation and schema support.
 - morgan  
-    + HTTP request logger.
+  + HTTP request logger.
 - react   
-    + React.
+  + React.
 - react-dom   
-    + React rendering, it is no longer bundled with React.
+  + React rendering, it is no longer bundled with React.
 - react-router   
-    + Routing library for React.
-- request 
-    + For making HTTP requests to EVE Online API.
+  + Routing library for React.
+- request
+  + For making HTTP requests to EVE Online API.
 - serve-favicon   
-    + For serving favicon.png icon.
+  + For serving favicon.png icon.
 - socket.io   
-    + To display how many users are online in real-time.
+  + To display how many users are online in real-time.
 - swig    
-    + To render the initial HTML template.
+  + To render the initial HTML template.
 - underscore  
-    + Helper JavaScript utilities.
+  + Helper JavaScript utilities.
 - xml2js  
-    + For parsing XML response from EVE Online API.
+  + For parsing XML response from EVE Online API.
+
+
+## 'view/index.html'
+
+- Client-side
+  + A rendered HTML markup is inserted into `<div id="app"></div>`
+- Server-side
+  + A rendered HTML markup is sent to the `index.html` template where
+it is inserted into `<div id="app">{{ html|safe }}</div>` by the
+Swig template engine.
