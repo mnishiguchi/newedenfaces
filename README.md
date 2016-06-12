@@ -76,3 +76,9 @@ Swig template engine.
 
 - Notification can be one of the few areas that should not be handled by React (along with tooltips)
 - It is far easier to display a notification imperatively from any part of our application than having to declaratively render notification component based on the current state.
+
+## [mongodb Mongod complains that there is no /data/db folder](http://stackoverflow.com/a/7948986/3837223)
+
+```
+sudo chown -R `id -u` /data/db
+```

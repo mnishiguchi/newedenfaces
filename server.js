@@ -1,6 +1,23 @@
 // Babel ES6/JSX Compiler
 require( 'babel-register' );
 
+
+//---
+// Import core Node.js modules — path, querystring, http, etc.
+//---
+
+var path = require('path');
+
+
+//---
+// Import third-party NPM libraries — mongoose, express, request, etc.
+//---
+
+// Server stuff.
+const express    = require( 'express' );
+const logger     = require( 'morgan' );
+const bodyParser = require( 'body-parser' );
+
 // Template engine.
 const swig       = require( 'swig' );
 
@@ -10,15 +27,32 @@ const ReactDOM   = require( 'react-dom/server' );
 const Router     = require( 'react-router' );
 const routes     = require( './app/routes' );
 
-// Server stuff.
-const express    = require( 'express' );
-const path       = require( 'path' );
-const logger     = require( 'morgan' );
-const bodyParser = require( 'body-parser' );
+// Dagabase stuff.
+const mongoose   = require( 'mongoose' );
+
+
+//---
+// Import application files — controllers, models, config, etc.
+//---
+
+const config     = require( './config' );
+// const routes     = require( './app/routes' );
+const Character  = require( './models/character' );
+
+
+//---
+//---
+
 
 // Initializes app to be a function handler using Express.
 const app = express();
 app.set( 'port', process.env.PORT || 3000 );
+
+// Connect to the database.
+mongoose.connect( config.database );
+mongoose.connection.on( 'error', function() {
+  console.info( 'Error: Could not connect to MongoDB. Did you forget to run `mongod`?' );
+});
 
 // Express middlewares.
 app.use( logger( 'dev' ) );
