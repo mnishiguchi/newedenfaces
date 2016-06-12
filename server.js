@@ -1,29 +1,63 @@
 // Babel ES6/JSX Compiler
 require( 'babel-register' );
 
+// Template engine.
 const swig       = require( 'swig' );
+
+// React stuff.
 const React      = require( 'react' );
 const ReactDOM   = require( 'react-dom/server' );
 const Router     = require( 'react-router' );
 const routes     = require( './app/routes' );
 
+// Server stuff.
 const express    = require( 'express' );
 const path       = require( 'path' );
 const logger     = require( 'morgan' );
 const bodyParser = require( 'body-parser' );
 
-// Express middlewares.
+// Initializes app to be a function handler using Express.
 const app = express();
-
 app.set( 'port', process.env.PORT || 3000 );
+
+// Express middlewares.
 app.use( logger( 'dev' ) );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
 app.use( express.static( path.join( __dirname, 'public' ) ) );
 
-app.listen( app.get( 'port' ), () => {
+// app.listen( app.get( 'port' ), () => {
+//   console.log( 'Express server listening on port ' + app.get( 'port' ) );
+// });
+
+
+/**
+ * Socket.io stuff.
+ *
+ * Increment / decrement the users count when a user joined / left.
+ */
+const server = require( 'http' ).createServer( app );
+const io     = require( 'socket.io' )( server );
+let onlineUsers = 0;
+
+io.sockets.on( 'connection', socket => {
+  onlineUsers++;
+
+  // Emit the 'onlineUsers' event with the updated data.
+  io.sockets.emit( 'onlineUsers', { onlineUsers: onlineUsers } );
+
+  socket.on( 'disconnect', () => {
+    onlineUsers--;
+
+    // Emit the 'onlineUsers' event with the updated data.
+    io.sockets.emit( 'onlineUsers', { onlineUsers: onlineUsers } );
+  });
+});
+
+server.listen( app.get( 'port' ), () => {
   console.log( 'Express server listening on port ' + app.get( 'port' ) );
 });
+
 
 /**
  * React Routes (Server-Side)
