@@ -71,3 +71,8 @@ Visit [http://localhost:3000](http://localhost:3000)
   + A rendered HTML markup is sent to the `index.html` template where
 it is inserted into `<div id="app">{{ html|safe }}</div>` by the
 Swig template engine.
+
+## Notification
+
+- Notification can be one of the few areas that should not be handled by React (along with tooltips)
+- It is far easier to display a notification imperatively from any part of our application than having to declaratively render notification component based on the current state.

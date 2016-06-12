@@ -27,7 +27,7 @@ app.listen( app.get( 'port' ), () => {
 
 /**
  * React Routes (Server-Side)
- * 
+ *
  * This middleware function will be executed on every request to the server,
  * unless a request is handled by the API endpoints.
  * Depending on the type of response, we take different actions.
@@ -62,7 +62,7 @@ app.use( ( req, res ) => {
       } else {
         res
           .status( 404 )
-          .send('Page Not Found' )
+          .send( 'Page Not Found' )
       }
     }
   );
