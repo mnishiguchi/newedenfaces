@@ -1,6 +1,7 @@
 import React from 'react';
 
 // Import components.
+import Navbar from './Navbar';
 import Footer from './Footer';
 
 /**
@@ -11,6 +12,7 @@ class App extends React.Component {
     return (
       // Similar to <ng-view> of AngularJS.
       <div>
+        <Navbar />
         {this.props.children}
         <Footer />
       </div>

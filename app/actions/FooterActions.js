@@ -8,19 +8,21 @@ class FooterActions {
     this.generateActions(
       'getTopCharactersSuccess',
       'getTopCharactersFail',
-      'ajaxInProgress',
-      'ajaxComplete'
+      'ajaxInProgress', // unused
+      'ajaxComplete'    // unused
     );
   }
 
   getTopCharacters() {
-    $.ajax({ url: '/api/characters/top' })
-      .done( data => {
-        this.actions.getTopCharactersSuccess( data );
-      })
-      .fail( jqXhr => {
-        this.actions.getTopCharactersFail( jqXhr );
-      })
+    $.ajax({
+      url: '/api/characters/top'
+    })
+    .done( data => {
+      this.actions.getTopCharactersSuccess( data );
+    })
+    .fail( jqXhr => {
+      this.actions.getTopCharactersFail( jqXhr );
+    })
   }
 }
 
