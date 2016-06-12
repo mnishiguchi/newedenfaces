@@ -17,6 +17,55 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var AddCharacterActions = function () {
+  function AddCharacterActions() {
+    _classCallCheck(this, AddCharacterActions);
+
+    this.generateActions('addCharacterSuccess', 'addCharacterFail', 'updateName', 'updateGender', 'invalidName', 'invalidGender');
+  }
+
+  _createClass(AddCharacterActions, [{
+    key: 'addCharacter',
+    value: function addCharacter(name, gender) {
+      var _this = this;
+
+      $.ajax({
+        type: 'POST',
+        url: '/api/characters',
+        data: { name: name, gender: gender }
+      }).done(function (data) {
+        _this.actions.addCharacterSuccess(data.message);
+      }).fail(function (jqXhr) {
+        // Perhaps due to an invalid name or because it already exists in the database.
+        _this.actions.addCharacterFail(jqXhr.responseJSON.message);
+      });
+    }
+  }]);
+
+  return AddCharacterActions;
+}();
+
+exports.default = _alt2.default.createActions(AddCharacterActions);
+
+},{"../alt":4}],2:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Import an instance of Alt created in `app/alt.js` file.
+// It is a glue between all of our stores and actions.
+
+
+var _alt = require('../alt');
+
+var _alt2 = _interopRequireDefault(_alt);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var FooterActions = function () {
   function FooterActions() {
     _classCallCheck(this, FooterActions);
@@ -46,7 +95,7 @@ var FooterActions = function () {
 
 exports.default = _alt2.default.createActions(FooterActions);
 
-},{"../alt":3}],2:[function(require,module,exports){
+},{"../alt":4}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -124,7 +173,7 @@ var NavbarActions = function () {
 
 exports.default = _alt2.default.createActions(NavbarActions);
 
-},{"../alt":3,"underscore":"underscore"}],3:[function(require,module,exports){
+},{"../alt":4,"underscore":"underscore"}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -142,7 +191,205 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 exports.default = new _alt2.default();
 
-},{"alt":"alt"}],4:[function(require,module,exports){
+},{"alt":"alt"}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _AddCharacterStore = require('../stores/AddCharacterStore');
+
+var _AddCharacterStore2 = _interopRequireDefault(_AddCharacterStore);
+
+var _AddCharacterActions = require('../actions/AddCharacterActions');
+
+var _AddCharacterActions2 = _interopRequireDefault(_AddCharacterActions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Consists of a simple form with a text field, radio buttons and
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * a submit button.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Success and error messages will be displayed within help-block
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * under the text field.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+var AddCharacter = function (_React$Component) {
+  _inherits(AddCharacter, _React$Component);
+
+  function AddCharacter(props) {
+    _classCallCheck(this, AddCharacter);
+
+    // Initialize the state.
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AddCharacter).call(this, props));
+
+    _this.state = _AddCharacterStore2.default.getState();
+
+    // Bind methods to this component instance.
+    _this.onChange = _this.onChange.bind(_this);
+    return _this;
+  }
+
+  _createClass(AddCharacter, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      // Listen for changes in state.
+      _AddCharacterStore2.default.listen(this.onChange);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      // Stop listening for changes in state.
+      _AddCharacterStore2.default.unlisten(this.onChange);
+    }
+  }, {
+    key: 'onChange',
+    value: function onChange(state) {
+      // Update the state and trigger the re-rendering.
+      // NOTE: Object `this` will be undefined without binding it explicitly.
+      this.setState(state);
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit(event) {
+      event.preventDefault();
+
+      var name = this.state.name.trim();
+      var gender = this.state.gender;
+
+      // Validate presence of name.
+      if (!name) {
+        _AddCharacterActions2.default.invalidName();
+        this.refs.nameTextField.getDOMNode().focus();
+      }
+
+      // Validate presence of gender.
+      if (!gender) {
+        _AddCharacterActions2.default.invalidGender();
+      }
+
+      // Process it.
+      if (name && gender) {
+        _AddCharacterActions2.default.addCharacter(name, gender);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        { className: 'container' },
+        _react2.default.createElement(
+          'div',
+          { className: 'row flipInX animated' },
+          _react2.default.createElement(
+            'div',
+            { className: 'col-sm-8' },
+            _react2.default.createElement(
+              'div',
+              { className: 'panel panel-default' },
+              _react2.default.createElement(
+                'div',
+                { className: 'panel-heading' },
+                'Add Character'
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'panel-body' },
+                _react2.default.createElement(
+                  'form',
+                  { onSubmit: this.handleSubmit.bind(this) },
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'form-group ' + this.state.nameValidationState },
+                    _react2.default.createElement(
+                      'label',
+                      { className: 'control-label' },
+                      'Character Name'
+                    ),
+                    _react2.default.createElement('input', {
+                      type: 'text',
+                      className: 'form-control',
+                      ref: 'nameTextField',
+                      value: this.state.name, onChange: _AddCharacterActions2.default.updateName,
+                      autoFocus: true
+                    }),
+                    _react2.default.createElement(
+                      'span',
+                      { className: 'help-block' },
+                      this.state.helpBlock
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'div',
+                    { className: 'form-group ' + this.state.genderValidationState },
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'radio radio-inline' },
+                      _react2.default.createElement('input', {
+                        type: 'radio',
+                        name: 'gender',
+                        id: 'female',
+                        value: 'Female',
+                        checked: this.state.gender === 'Female', onChange: _AddCharacterActions2.default.updateGender
+                      }),
+                      _react2.default.createElement(
+                        'label',
+                        { htmlFor: 'female' },
+                        'Female'
+                      )
+                    ),
+                    _react2.default.createElement(
+                      'div',
+                      { className: 'radio radio-inline' },
+                      _react2.default.createElement('input', {
+                        type: 'radio',
+                        name: 'gender',
+                        id: 'male',
+                        value: 'Male',
+                        checked: this.state.gender === 'Male', onChange: _AddCharacterActions2.default.updateGender
+                      }),
+                      _react2.default.createElement(
+                        'label',
+                        { htmlFor: 'male' },
+                        'Male'
+                      )
+                    )
+                  ),
+                  _react2.default.createElement(
+                    'button',
+                    {
+                      type: 'submit',
+                      className: 'btn btn-primary' },
+                    'Submit'
+                  )
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return AddCharacter;
+}(_react2.default.Component);
+
+exports.default = AddCharacter;
+
+},{"../actions/AddCharacterActions":1,"../stores/AddCharacterStore":12,"react":"react"}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -208,7 +455,7 @@ var App = function (_React$Component) {
 
 exports.default = App;
 
-},{"./Footer":5,"./Navbar":7,"react":"react"}],5:[function(require,module,exports){
+},{"./Footer":7,"./Navbar":9,"react":"react"}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -392,7 +639,7 @@ var Footer = function (_React$Component) {
 
 exports.default = Footer;
 
-},{"../actions/FooterActions":1,"../stores/FooterStore":10,"react":"react","react-router":"react-router"}],6:[function(require,module,exports){
+},{"../actions/FooterActions":2,"../stores/FooterStore":13,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -438,7 +685,7 @@ var Home = function (_React$Component) {
 
 exports.default = Home;
 
-},{"react":"react"}],7:[function(require,module,exports){
+},{"react":"react"}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1236,7 +1483,7 @@ var Navbar = function (_React$Component) {
 
 exports.default = Navbar;
 
-},{"../actions/NavbarActions":2,"../stores/NavbarStore":11,"react":"react","react-router":"react-router"}],8:[function(require,module,exports){
+},{"../actions/NavbarActions":3,"../stores/NavbarStore":14,"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -1279,7 +1526,7 @@ _reactDom2.default.render(_react2.default.createElement(
   _routes2.default
 ), document.getElementById('app'));
 
-},{"./routes":9,"history/lib/createBrowserHistory":20,"react":"react","react-dom":"react-dom","react-router":"react-router"}],9:[function(require,module,exports){
+},{"./routes":11,"history/lib/createBrowserHistory":23,"react":"react","react-dom":"react-dom","react-router":"react-router"}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1300,6 +1547,10 @@ var _Home = require('./components/Home');
 
 var _Home2 = _interopRequireDefault(_Home);
 
+var _AddCharacter = require('./components/AddCharacter');
+
+var _AddCharacter2 = _interopRequireDefault(_AddCharacter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default =
@@ -1309,10 +1560,97 @@ exports.default =
 _react2.default.createElement(
   _reactRouter.Route,
   { component: _App2.default },
-  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _Home2.default })
+  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _Home2.default }),
+  _react2.default.createElement(_reactRouter.Route, { path: '/add', component: _AddCharacter2.default })
 );
 
-},{"./components/App":4,"./components/Home":6,"react":"react","react-router":"react-router"}],10:[function(require,module,exports){
+},{"./components/AddCharacter":5,"./components/App":6,"./components/Home":8,"react":"react","react-router":"react-router"}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Import an instance of Alt created in `app/alt.js` file.
+// It is a glue between all of our stores and actions.
+
+
+var _alt = require('../alt');
+
+var _alt2 = _interopRequireDefault(_alt);
+
+var _AddCharacterActions = require('../actions/AddCharacterActions');
+
+var _AddCharacterActions2 = _interopRequireDefault(_AddCharacterActions);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var AddCharacterStore = function () {
+  function AddCharacterStore() {
+    _classCallCheck(this, AddCharacterStore);
+
+    // A magical Alt method to bind actions to their handlers.
+    this.bindActions(_AddCharacterActions2.default);
+
+    // Initial state.
+    this.name = '';
+    this.gender = '';
+    this.helpBlock = '';
+    // Refers to the validation states on form controls provided by Bootstrap.
+    this.nameValidationState = '';
+    this.genderValidationState = '';
+  }
+
+  //---
+  // Handers for actions.
+  //---
+
+  _createClass(AddCharacterStore, [{
+    key: 'onAddCharacterSuccess',
+    value: function onAddCharacterSuccess(successMessage) {
+      this.nameValidationState = 'has-success';
+      this.helpBlock = successMessage;
+    }
+  }, {
+    key: 'onAddCharacterFail',
+    value: function onAddCharacterFail(errorMessage) {
+      this.nameValidationState = 'has-error';
+      this.helpBlock = errorMessage;
+    }
+  }, {
+    key: 'onUpdateName',
+    value: function onUpdateName(event) {
+      this.name = event.target.value;
+      this.nameValidationState = '';
+      this.helpBlock = '';
+    }
+  }, {
+    key: 'onUpdateGender',
+    value: function onUpdateGender(event) {
+      this.gender = event.target.value;
+      this.genderValidationState = '';
+    }
+  }, {
+    key: 'onInvalidName',
+    value: function onInvalidName() {
+      this.nameValidationState = 'has-error';
+      this.helpBlock = 'Please enter a character name.';
+    }
+  }, {
+    key: 'onInvalidGender',
+    value: function onInvalidGender() {
+      this.genderValidationState = 'has-error';
+    }
+  }]);
+
+  return AddCharacterStore;
+}();
+
+exports.default = _alt2.default.createStore(AddCharacterStore);
+
+},{"../actions/AddCharacterActions":1,"../alt":4}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1346,21 +1684,15 @@ var FooterStore = function () {
     this.characters = [];
   }
 
-  /**
-   * The handler for `getTopCharactersSuccess` action.
-   */
-
+  //---
+  // Handers for actions.
+  //---
 
   _createClass(FooterStore, [{
     key: 'onGetTopCharactersSuccess',
     value: function onGetTopCharactersSuccess(data) {
       this.characters = data.slice(0, 5);
     }
-
-    /**
-     * The handler for `getTopCharactersFail` action.
-     */
-
   }, {
     key: 'onGetTopCharactersFail',
     value: function onGetTopCharactersFail(jqXhr) {
@@ -1376,7 +1708,7 @@ var FooterStore = function () {
 
 exports.default = _alt2.default.createStore(FooterStore);
 
-},{"../actions/FooterActions":1,"../alt":3}],11:[function(require,module,exports){
+},{"../actions/FooterActions":2,"../alt":4}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1413,22 +1745,15 @@ var NavbarStore = function () {
     this.ajaxAnimationClass = '';
   }
 
-  /**
-   * Handles `findCharacterSuccess` action.
-   */
-
+  //---
+  // Handers for actions.
+  //---
 
   _createClass(NavbarStore, [{
     key: 'onFindCharacterSuccess',
     value: function onFindCharacterSuccess(payload) {
       payload.history.pushState(null, '/characters/' + payload.characterId);
     }
-
-    /**
-     * Handles `findCharacterFail` action.
-     * Add a shaking animation to the input field.
-     */
-
   }, {
     key: 'onFindCharacterFail',
     value: function onFindCharacterFail(payload) {
@@ -1438,51 +1763,26 @@ var NavbarStore = function () {
         payload.searchForm.classList.remove('shake');
       }, 1000);
     }
-
-    /**
-     * Handles `updateOnlineUsers` action.
-     */
-
   }, {
     key: 'onUpdateOnlineUsers',
     value: function onUpdateOnlineUsers(data) {
       this.onlineUsers = data.onlineUsers;
     }
-
-    /**
-     * Handles `updateAjaxAnimation` action.
-     */
-
   }, {
     key: 'onUpdateAjaxAnimation',
     value: function onUpdateAjaxAnimation(className) {
       this.ajaxAnimationClass = className; // fadein or fadeout
     }
-
-    /**
-     * Handles `updateSearchQuery` action.
-     */
-
   }, {
     key: 'onUpdateSearchQuery',
     value: function onUpdateSearchQuery(event) {
       this.searchQuery = event.target.value;
     }
-
-    /**
-     * Handles `getCharacterCountSuccess` action.
-     */
-
   }, {
     key: 'onGetCharacterCountSuccess',
     value: function onGetCharacterCountSuccess(data) {
       this.totalCharacters = data.count;
     }
-
-    /**
-     * Handles `getCharacterCountFail` action.
-     */
-
   }, {
     key: 'onGetCharacterCountFail',
     value: function onGetCharacterCountFail(jqXhr) {
@@ -1495,7 +1795,7 @@ var NavbarStore = function () {
 
 exports.default = _alt2.default.createStore(NavbarStore);
 
-},{"../actions/NavbarActions":2,"../alt":3}],12:[function(require,module,exports){
+},{"../actions/NavbarActions":3,"../alt":4}],15:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -1591,7 +1891,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":13,"./lib/keys.js":14}],13:[function(require,module,exports){
+},{"./lib/is_arguments.js":16,"./lib/keys.js":17}],16:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -1613,7 +1913,7 @@ function unsupported(object){
     false;
 };
 
-},{}],14:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -1624,7 +1924,7 @@ function shim (obj) {
   return keys;
 }
 
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 /**
  * Indicates that navigation was caused by a call to history.push.
  */
@@ -1656,7 +1956,7 @@ exports['default'] = {
   REPLACE: REPLACE,
   POP: POP
 };
-},{}],16:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -1683,7 +1983,7 @@ function loopAsync(turns, work, callback) {
 
   next();
 }
-},{}],17:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function (process){
 /*eslint-disable no-empty */
 'use strict';
@@ -1755,7 +2055,7 @@ function readState(key) {
 }
 }).call(this,require('_process'))
 
-},{"_process":29,"warning":30}],18:[function(require,module,exports){
+},{"_process":32,"warning":33}],21:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1836,13 +2136,13 @@ function supportsGoWithoutReloadUsingHash() {
   var ua = navigator.userAgent;
   return ua.indexOf('Firefox') === -1;
 }
-},{}],19:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
 var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 exports.canUseDOM = canUseDOM;
-},{}],20:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2024,7 +2324,7 @@ exports['default'] = createBrowserHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
 
-},{"./Actions":15,"./DOMStateStorage":17,"./DOMUtils":18,"./ExecutionEnvironment":19,"./createDOMHistory":21,"./parsePath":26,"_process":29,"invariant":28}],21:[function(require,module,exports){
+},{"./Actions":18,"./DOMStateStorage":20,"./DOMUtils":21,"./ExecutionEnvironment":22,"./createDOMHistory":24,"./parsePath":29,"_process":32,"invariant":31}],24:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2068,7 +2368,7 @@ exports['default'] = createDOMHistory;
 module.exports = exports['default'];
 }).call(this,require('_process'))
 
-},{"./DOMUtils":18,"./ExecutionEnvironment":19,"./createHistory":22,"_process":29,"invariant":28}],22:[function(require,module,exports){
+},{"./DOMUtils":21,"./ExecutionEnvironment":22,"./createHistory":25,"_process":32,"invariant":31}],25:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -2360,7 +2660,7 @@ function createHistory() {
 
 exports['default'] = createHistory;
 module.exports = exports['default'];
-},{"./Actions":15,"./AsyncUtils":16,"./createLocation":23,"./deprecate":24,"./parsePath":26,"./runTransitionHook":27,"deep-equal":12}],23:[function(require,module,exports){
+},{"./Actions":18,"./AsyncUtils":19,"./createLocation":26,"./deprecate":27,"./parsePath":29,"./runTransitionHook":30,"deep-equal":15}],26:[function(require,module,exports){
 //import warning from 'warning'
 'use strict';
 
@@ -2415,7 +2715,7 @@ function createLocation() {
 
 exports['default'] = createLocation;
 module.exports = exports['default'];
-},{"./Actions":15,"./parsePath":26}],24:[function(require,module,exports){
+},{"./Actions":18,"./parsePath":29}],27:[function(require,module,exports){
 //import warning from 'warning'
 
 "use strict";
@@ -2431,7 +2731,7 @@ function deprecate(fn) {
 
 exports["default"] = deprecate;
 module.exports = exports["default"];
-},{}],25:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -2445,7 +2745,7 @@ function extractPath(string) {
 
 exports["default"] = extractPath;
 module.exports = exports["default"];
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2493,7 +2793,7 @@ exports['default'] = parsePath;
 module.exports = exports['default'];
 }).call(this,require('_process'))
 
-},{"./extractPath":25,"_process":29,"warning":30}],27:[function(require,module,exports){
+},{"./extractPath":28,"_process":32,"warning":33}],30:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -2521,7 +2821,7 @@ exports['default'] = runTransitionHook;
 module.exports = exports['default'];
 }).call(this,require('_process'))
 
-},{"_process":29,"warning":30}],28:[function(require,module,exports){
+},{"_process":32,"warning":33}],31:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -2577,7 +2877,7 @@ module.exports = invariant;
 
 }).call(this,require('_process'))
 
-},{"_process":29}],29:[function(require,module,exports){
+},{"_process":32}],32:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2673,7 +2973,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -2738,7 +3038,7 @@ module.exports = warning;
 
 }).call(this,require('_process'))
 
-},{"_process":29}]},{},[8])
+},{"_process":32}]},{},[10])
 
 
 //# sourceMappingURL=bundle.js.map

@@ -5,6 +5,7 @@ import alt from '../alt';
 import FooterActions from '../actions/FooterActions';
 
 class FooterStore {
+
   constructor() {
     // A magical Alt method to bind actions to their handlers.
     this.bindActions( FooterActions );
@@ -13,16 +14,16 @@ class FooterStore {
     this.characters = [];
   }
 
-  /**
-   * The handler for `getTopCharactersSuccess` action.
-   */
+
+  //---
+  // Handers for actions.
+  //---
+
+
   onGetTopCharactersSuccess(data) {
     this.characters = data.slice( 0, 5 );
   }
 
-  /**
-   * The handler for `getTopCharactersFail` action.
-   */
   onGetTopCharactersFail( jqXhr ) {
     // Handle multiple response formats, fallback to HTTP status code number.
     toastr.error(

@@ -16,9 +16,12 @@ class NavbarStore {
     this.ajaxAnimationClass = '';
   }
 
-  /**
-   * Handles `findCharacterSuccess` action.
-   */
+
+  //---
+  // Handers for actions.
+  //---
+
+
   onFindCharacterSuccess( payload ) {
     payload.history.pushState(
       null,
@@ -26,10 +29,6 @@ class NavbarStore {
     );
   }
 
-  /**
-   * Handles `findCharacterFail` action.
-   * Add a shaking animation to the input field.
-   */
   onFindCharacterFail( payload ) {
     // Add the 'shake' CSS class to the search form then remove it after 1 second.
     payload.searchForm.classList.add( 'shake' );
@@ -38,37 +37,22 @@ class NavbarStore {
     }, 1000 );
   }
 
-  /**
-   * Handles `updateOnlineUsers` action.
-   */
   onUpdateOnlineUsers( data ) {
     this.onlineUsers = data.onlineUsers;
   }
 
-  /**
-   * Handles `updateAjaxAnimation` action.
-   */
   onUpdateAjaxAnimation( className ) {
     this.ajaxAnimationClass = className; // fadein or fadeout
   }
 
-  /**
-   * Handles `updateSearchQuery` action.
-   */
   onUpdateSearchQuery( event ) {
     this.searchQuery = event.target.value;
   }
 
-  /**
-   * Handles `getCharacterCountSuccess` action.
-   */
   onGetCharacterCountSuccess( data ) {
     this.totalCharacters = data.count;
   }
 
-  /**
-   * Handles `getCharacterCountFail` action.
-   */
   onGetCharacterCountFail( jqXhr ) {
     toastr.error( jqXhr.responseJSON.message );
   }
